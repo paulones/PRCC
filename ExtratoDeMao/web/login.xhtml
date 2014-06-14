@@ -1,0 +1,95 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html; charset=ISO-8859-1">  
+        <h:head>
+            <title>Login</title>
+            <f:metadata>
+                <f:event type="preRenderComponent" listener="#{loginBean.init()}"></f:event>
+            </f:metadata>
+        </h:head>
+        <h:body>
+            <br/><br/><br/><br/><br/><br/><br/><br/><br/>
+            <center>
+                <p:panel id="loginPanel" style="margin: 0 auto; width: 35%" >
+
+                    <h:form id="growForm">
+                        <p:growl id="growMsg" life="4000"/>
+                    </h:form>
+
+                    <h:outputLabel value="Selecione o extrato que deseja consultar: " rendered="#{loginBean.loggedUser.userId != null}"/>
+                    <h:outputLabel value="Faça login de seu usuário: " rendered="#{loginBean.loggedUser.userId == null}"/>
+                    <br/>
+                    <h:form>
+
+                        <h:panelGrid id="loginGrid" columns="2" rendered="#{loginBean.loggedUser.userId == null}">
+                            <h:outputLabel value="Usuário:"/>
+                            <h:inputText value="#{loginBean.user.userName}" size="16"/>
+
+                            <h:outputText value="Senha:"/>
+                            <p:password value="#{loginBean.user.userPass}" size="15" />
+                        </h:panelGrid>
+                        <h:commandButton value="Logar" action="#{loginBean.enter()}" rendered="#{loginBean.loggedUser.userId == null}" />
+
+                        <h:outputLabel value="Logado: " rendered="#{loginBean.loggedUser.userId != null}"/>
+                        <h:outputLabel value="#{loginBean.loggedUser.userName}" rendered="#{loginBean.loggedUser.userId != null}"/>
+
+                        <h:panelGrid id="extractGrid" columns="2" rendered="#{loginBean.loggedUser.userId != null}">
+                            <h:outputLabel value="Extrato:"/>
+                            <p:selectOneMenu id="selectExtract" value="#{loginBean.extract.extractId}">  
+                                <f:selectItem itemLabel="Select One" itemValue="" />
+                                <f:selectItems value="#{loginBean.listaItem}" />  
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+                        <h:commandButton value="Ver Extrato" action="#{loginBean.login()}" rendered="#{loginBean.loggedUser.userId != null}"/>
+
+
+                        <br/>
+                        <p:commandLink id="novoUsuario" update="@([id$=newUserGrid])" 
+                                       actionListener="#{loginBean.init()}" rendered="#{loginBean.loggedUser.userId == null}"
+                                       style="margin-right:20px;" onclick="dlgNewUser.show();">  
+                            <h:outputText value="Novo Usuário" />  
+                        </p:commandLink>
+
+                        <p:commandLink id="novoextrato" update="@([id$=newUserGrid])" 
+                                       actionListener="#{loginBean.init()}" rendered="#{loginBean.loggedUser.userId != null}"
+                                       style="margin-right:20px;" onclick="dlgNewExtract.show();">  
+                            <h:outputText value="Novo Extrato" />  
+                        </p:commandLink>
+                    </h:form>
+
+                    <h:form id="newUserForm">
+                        <p:dialog id="newUserModal" header="Criar novo usuário" widgetVar="dlgNewUser" 
+                                  modal="true" hideEffect="puff">
+                            <h:panelGrid id="newUserGrid" columns="2">
+                                <h:outputLabel value="Nome: " />
+                                <h:inputText value="#{loginBean.user.userName}"/>
+
+                                <h:outputText value="Senha: " />
+                                <h:inputText value="#{loginBean.user.userPass}"/>
+
+                            </h:panelGrid>
+                            <h:commandButton value="Salvar" action="#{loginBean.createUser()}"/>
+                        </p:dialog>
+                    </h:form>
+
+                    <h:form id="newExtractForm">
+                        <p:dialog id="newExtractModal" header="Criar novo extrato" widgetVar="dlgNewExtract" 
+                                  modal="true" hideEffect="puff">
+                            <h:panelGrid id="newExtractGrid" columns="2">
+                                <h:outputLabel value="Nome: " />
+                                <h:inputText value="#{loginBean.extract.extractName}"/>
+
+                            </h:panelGrid>
+                            <h:commandButton value="Salvar" action="#{loginBean.createExtract()}"/>
+                        </p:dialog>
+                    </h:form>
+                </p:panel>
+            </center>
+        </h:body>
+    </f:view>
+</html>

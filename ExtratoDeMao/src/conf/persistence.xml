@@ -1,0 +1,60 @@
+<!--?xml version="1.0" encoding="UTF-8"?>
+<persistence version="2.0" xmlns="http://java.sun.com/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
+    <persistence-unit name="ExtratoDeMaoPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>Entity.Logs</class>
+        <class>Entity.Movements</class>
+        <class>Entity.Parcelas</class>
+        <class>Entity.Users</class>
+        <class>Entity.Extracts</class>
+        <class>Entity.Movements</class>
+        <exclude-unlisted-classes>false</exclude-unlisted-classes>
+        <properties>
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlserver://172.16.0.4:1433;databaseName=handextract"/>
+            <property name="javax.persistence.jdbc.password" value="123@net"/>
+            <property name="javax.persistence.jdbc.driver" value="com.microsoft.sqlserver.jdbc.SQLServerDriver"/>
+            <property name="javax.persistence.jdbc.user" value="user_web"/>
+        </properties>
+    </persistence-unit>
+</persistence-->
+
+<!--?xml version="1.0" encoding="UTF-8" ?>
+<persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+               version="2.0"
+               xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="ExtratoDeMaoPU" transaction-type="RESOURCE_LOCAL">
+        <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+        <class>Entity.Logs</class>
+        <class>Entity.Movements</class>
+        <class>Entity.Parcelas</class>
+        <class>Entity.Users</class>
+        <class>Entity.Extracts</class>
+        <class>Entity.Movements</class>
+        <class>org.denevell.tomcat.entities.write.AnotherThing</class>
+        <properties>
+            <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+            <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:HandExtract.db" />
+            <property name="eclipselink.logging.level" value="ALL" />
+            <property name="eclipselink.ddl-generation" value="create-tables" />
+        </properties>
+    </persistence-unit>
+</persistence-->
+
+
+  
+  <persistence xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd"
+      version="2.0"
+      xmlns="http://java.sun.com/xml/ns/persistence">
+    <persistence-unit name="ExtratoDeMaoPU" transaction-type="RESOURCE_LOCAL">
+      <provider>org.eclipse.persistence.jpa.PersistenceProvider</provider>
+      <class>org.denevell.tomcat.entities.write.AnotherThing</class>
+      <properties>
+        <property name="javax.persistence.jdbc.driver" value="org.sqlite.JDBC" />
+        <property name="javax.persistence.jdbc.url" value="jdbc:sqlite:HandExtract.db" />
+        <property name="eclipselink.logging.level" value="ALL" />
+        <property name="eclipselink.ddl-generation" value="create-tables" />
+      </properties>
+    </persistence-unit>
+ </persistence>

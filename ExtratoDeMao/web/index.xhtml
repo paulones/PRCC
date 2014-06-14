@@ -1,0 +1,211 @@
+<?xml version='1.0' encoding='ISO-8859-1' ?>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <f:view contentType="text/html; charset=ISO-8859-1">  
+        <h:head>
+            <f:metadata>
+                <f:event type="preRenderComponent" listener="#{extractBean.init()}"></f:event>
+            </f:metadata>
+            <title>Extrato: #{extractBean.user.userName}</title>
+        </h:head>
+
+        <h:body>
+
+            <p:panel id="Extrato">
+                <f:facet name="header">
+                    <left>
+                        <h:form id="logoutForm">
+                            <h:commandLink value="Logout" action="#{extractBean.logout()}" style="margin-left: 95%;"/>
+                        </h:form>
+                    </left>
+                    <center>
+                        <h:outputLabel value="Controle Financeiro v1.1" />
+                        <h:form >
+                            <p:commandButton  action="#{extractBean.backYear()}" update="mes,ano,:extratForm:movements" value="--" 
+                                              id="voltarAno" styleClass="ui-priority-primary"/>
+                            <p:commandButton  action="#{extractBean.back()}" update="mes,ano,:extratForm:movements" value="-" 
+                                              id="voltarMes" styleClass="ui-priority-primary"/>
+                            <p:outputLabel id="mes" value="#{extractBean.mesStr}"/> 
+                            /
+                            <p:outputLabel id="ano"  value="#{extractBean.anoStr}"/>
+                            <p:commandButton action="#{extractBean.advance()}" update="mes,ano,:extratForm:movements" value="+" 
+                                             id="avancarMes" styleClass="ui-priority-primary"/>
+                            <p:commandButton action="#{extractBean.advanceYear()}" update="mes,ano,:extratForm:movements" value="++" 
+                                             id="avancarAno" styleClass="ui-priority-primary"/>
+                        </h:form>
+                    </center>
+                </f:facet>
+                <h:form id="growForm">
+                    <p:growl id="growMsg" life="4000"/>
+                </h:form>
+
+                <h:form id="extratForm">
+                    <p:dataTable id="movements" var="movs" value="#{extractBean.movesList}" rowKey="#{movs.movId}"
+                                 selection="#{extractBean.selectedMove}" selectionMode="single" scrollable="true" 
+                                 scrollHeight="350" >
+                        <f:facet name="header">  
+                            Lista de Movimentações
+                        </f:facet>
+
+                        <p:ajax event="rowSelect" listener="#{extractBean.onRowSelect}"
+                                update="@([id$=updateMoveDetails]) :growForm:growMsg" oncomplete="dlgUpdate.show()" />
+
+                        <p:column headerText="Pagamento" width="9%" sortBy="#{movs.atualLog.dataReg.date}">
+                            <center>
+                                <h:outputText value="#{movs.pgtoStr}" title="#{movs.regStr}"/>  
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Parcela" width="6%">
+                            <center>
+                                <h:outputText value="#{movs.parcelaStr}"/>  
+                            </center>
+                        </p:column>
+
+                        <p:column headerText="Movimento" sortBy="#{movs.movDesc}">  
+                            <h:outputText value="#{movs.movDesc}" />  
+                        </p:column>  
+
+                        <p:column headerText="Receita" footerText="#{extractBean.receitaTotal}" 
+                                  width="8%" sortBy="#{movs.atualLog.receita}" style="color: green">
+                            <h:outputText value="#{movs.atualLog.receita}" style="color: green"/>  
+                        </p:column>  
+
+                        <p:column headerText="Despesa" footerText="#{extractBean.despesaTotal}" 
+                                  width="8%" sortBy="#{movs.atualLog.despesa}" style="color: red">  
+                            <h:outputText value="#{movs.atualLog.despesa}" style="color: red"/>  
+                        </p:column>
+
+                        <p:column headerText="Saldo" footerText="#{extractBean.saldoTotal}" 
+                                  width="8%" sortBy="#{movs.atualLog.saldo}" style="color: #{extractBean.saldoColor}">  
+                            <h:outputText value="#{movs.atualLog.saldo}" style="color: green" rendered="#{movs.atualLog.positivo}"/>
+                            <h:outputText value="#{movs.atualLog.saldo}" style="color: red" rendered="#{not movs.atualLog.positivo}"/>
+                        </p:column>
+
+                        <p:column style="width:6%">  
+                            <p:commandButton id="editButton" update="@([id$=editMoveDetails])" oncomplete="dlgEdit.show()" value="Edit" title="Corrigir">  
+                                <f:setPropertyActionListener value="#{movs}" target="#{extractBean.selectedMove}" />  
+                            </p:commandButton>  
+                        </p:column>
+
+                        <p:column style="width:8%">  
+                            <p:commandButton id="deleteButton" value="Delete" title="Deletar" onclick="confirmation.show()" >
+                                <f:setPropertyActionListener value="#{movs}" target="#{extractBean.selectedMove}" />
+                            </p:commandButton>
+                        </p:column>  
+
+                        <f:facet name="footer">  
+                            <p:commandButton id="CadModalButton" value="Cadastrar" 
+                                             onclick="dlgCad.show();" type="button"
+                                             action="#{extractBean.resetNewMoves()}" 
+                                             update="@([id$=addMoveDetails])">
+                            </p:commandButton>
+                        </f:facet>
+                    </p:dataTable>
+                </h:form>
+
+
+
+
+                <!--
+                    Xhtml referente às janelas modais
+                -->
+
+
+
+                <h:form id="cadForm">
+                    <p:dialog id="CadModal" header="Cadastrar Movimentos" widgetVar="dlgCad" 
+                              modal="true" hideEffect="puff">
+                        <h:panelGrid id="addMoveDetails" columns="2">
+                            <h:outputLabel value="Nome: " />
+                            <h:inputText value="#{extractBean.newMove.movDesc}"/>
+
+                            <h:outputText value="Receita: " />
+                            <h:inputText value="#{extractBean.newMove.atualLog.receita}"/>
+
+                            <h:outputText value="Despesa: " />
+                            <h:inputText value="#{extractBean.newMove.atualLog.despesa}"/>
+
+                            <h:outputText value="Data: " />
+                            <p:calendar value="#{extractBean.newMove.dataIni}" locale="pt" 
+                                        effect="drop" navigator="true"/>
+
+                            <h:outputText value="Parcelas: " />
+                            <h:inputText value="#{extractBean.newMove.atualLog.parcelas}"/>
+                        </h:panelGrid>
+                        <h:commandButton value="Salvar" action="#{extractBean.addMovement()}"/>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="updateForm">
+                    <p:dialog id="updateModal" header="Atualizar Movimentos" widgetVar="dlgUpdate" 
+                              modal="true" hideEffect="puff">
+                        <h:panelGrid id="updateMoveDetails" columns="2">
+                            <h:outputLabel value="Nome: " />
+                            <h:outputLabel value="#{extractBean.selectedMove.movDesc}"/>
+
+                            <h:outputText value="Receita: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.receita}"/>
+
+                            <h:outputText value="Despesa: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.despesa}"/>
+
+                            <h:outputText value="Data: " />
+                            <p:calendar value="#{extractBean.selectedMove.atualLog.dataReg}" locale="pt" 
+                                        effect="drop" navigator="true"/>
+
+                            <h:outputText value="Parcelas: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.parcelas}"/>
+                        </h:panelGrid>
+                        <h:commandButton value="Salvar" action="#{extractBean.updateMovement()}"/>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="editForm">
+                    <p:dialog id="editModal" header="Corrigir Movimento" widgetVar="dlgEdit" 
+                              modal="true" hideEffect="puff">
+                        <h:panelGrid id="editMoveDetails" columns="2">
+                            <h:outputLabel value="Nome: " />
+                            <h:inputText value="#{extractBean.selectedMove.movDesc}"/>
+
+                            <h:outputText value="Data Movimento: " />
+                            <p:calendar value="#{extractBean.selectedMove.dataIni}" locale="pt" 
+                                        effect="drop" navigator="true"/>
+
+                            <h:outputText value="Receita: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.receita}"/>
+
+                            <h:outputText value="Despesa: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.despesa}"/>
+
+                            <h:outputText value="Data Situação: " />
+                            <p:calendar value="#{extractBean.selectedMove.atualLog.dataReg}" locale="pt" 
+                                        effect="drop" navigator="true"/>
+
+                            <h:outputText value="Parcelas: " />
+                            <h:inputText value="#{extractBean.selectedMove.atualLog.parcelas}"/>
+                        </h:panelGrid>
+                        <h:commandButton value="Salvar" action="#{extractBean.modifyMovement()}"/>
+                    </p:dialog>
+                </h:form>
+
+                <h:form id="deleteForm">
+                    <p:confirmDialog id="deleteDialog" message="Você tem certeza que deseja deletar este movimento e todo histórico relacionado?"  
+                                     header="Deletar" severity="alert" widgetVar="confirmation" hideEffect="puff">  
+
+                        <p:commandButton id="confirm" value="Sim" oncomplete="confirmation.hide()"  
+                                         actionListener="#{extractBean.deleteMovement()}" update="@([id$=movements]) :growForm:growMsg"/>  
+                        <p:commandButton id="decline" value="Não" onclick="confirmation.hide()" type="button" />   
+
+                    </p:confirmDialog>
+                </h:form>
+
+            </p:panel>  
+        </h:body>
+    </f:view>
+</html>
+
