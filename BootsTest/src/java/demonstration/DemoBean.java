@@ -7,7 +7,8 @@ package demonstration;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.enterprise.context.SessionScoped;
+import javax.faces.bean.ManagedBean;
+import javax.faces.bean.SessionScoped;
 import javax.inject.Inject;
 import javax.inject.Named;
 import javax.validation.ConstraintViolationException;
@@ -22,8 +23,8 @@ import org.hibernate.validator.constraints.NotEmpty;
  * @author ramki
  */
 
-@Named
 @SessionScoped
+@ManagedBean(name = "demoBean")
 public class DemoBean implements Serializable{
     //@Inject Test test;
     
@@ -86,7 +87,7 @@ public class DemoBean implements Serializable{
             
             return null;
         }
-        return "Result";
+        return "result?faces-redirect=true";
     }
 
    
