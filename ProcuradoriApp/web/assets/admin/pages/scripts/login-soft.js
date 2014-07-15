@@ -28,6 +28,7 @@ var Login = function () {
 
 	            invalidHandler: function (event, validator) { //display error alert on form submit   
 	                $('.alert-danger', $('.login-form')).show();
+                        $('.login-error').hide();
 	            },
 
 	            highlight: function (element) { // hightlight error inputs
@@ -45,14 +46,15 @@ var Login = function () {
 	            },
 
 	            submitHandler: function (form) {
-	                form.submit();
+	                $('.submit-login').click();
 	            }
 	        });
 
 	        $('.login-form input').keypress(function (e) {
 	            if (e.which == 13) {
 	                if ($('.login-form').validate().form()) {
-	                    $('.login-form').submit();
+                            $('.submit-login').click();
+	                    //$('.login-form').submit();
 	                }
 	                return false;
 	            }
