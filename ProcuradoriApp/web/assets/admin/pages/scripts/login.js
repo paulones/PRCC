@@ -127,12 +127,12 @@ var Login = function () {
 
 		function format(state) {
             if (!state.id) return state.text; // optgroup
-            return "<img class='flag' src='../../assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
+            return "<img class='flag' src='assets/global/img/flags/" + state.id.toLowerCase() + ".png'/>&nbsp;&nbsp;" + state.text;
         }
 
 
 		$("#select2_sample4").select2({
-		  	placeholder: '<i class="fa fa-map-marker"></i>&nbsp;Select a Country',
+		  	placeholder: '<i class="fa fa-map-marker"></i>&nbsp;Selecione um País',
             allowClear: true,
             formatResult: format,
             formatSelection: format,
