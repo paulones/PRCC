@@ -19,24 +19,43 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    private boolean loginFail;
-
+    private boolean success;
+    private boolean fail;
+    
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            loginFail = false;
-        }
+            fail = false;
+            success = false;
+        } 
     }
 
-    public void submit() {
-        loginFail = true;
+    public void login() {
+        fail = true;
+        success = false;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não existe.", null));
+    }
+    
+    public void recoverPassword(){
+        success = true;
+        fail = false;
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitação enviada. Verifique seu e-mail.", null));
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao tentar enviar e-mail. Tente novamente.", null));
     }
 
-    public boolean isLoginFail() {
-        return loginFail;
+    public boolean isSuccess() {
+        return success;
     }
 
-    public void setLoginFail(boolean loginFail) {
-        this.loginFail = loginFail;
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public boolean isFail() {
+        return fail;
+    }
+
+    public void setFail(boolean fail) {
+        this.fail = fail;
     }
 
 }

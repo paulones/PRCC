@@ -3,7 +3,8 @@
 <html lang="pt" xmlns="http://www.w3.org/1999/xhtml"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:ui="http://java.sun.com/jsf/facelets">
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://xmlns.jcp.org/jsf/passthrough">
     <!--<![endif]-->
     <!-- BEGIN HEAD -->
     <h:head>
@@ -53,10 +54,15 @@
             <!-- BEGIN LOGIN FORM -->
             <h:form class="login-form">
                 <h3 class="form-title">Login</h3>
-                <h:panelGroup layout="block" styleClass="alert alert-danger login-error" rendered="#{loginBean.loginFail}">
+                <h:panelGroup id="message-error" layout="block" styleClass="alert alert-danger login-error" rendered="#{loginBean.fail}">
                     <button class="close" data-close="alert"></button>
                     <span>
-                        Usuário não existe. </span>
+                        <h:messages layout="table" /> </span>
+                </h:panelGroup>
+                <h:panelGroup id="message-success" layout="block" styleClass="alert alert-success login-success" rendered="#{loginBean.success}">
+                    <button class="close" data-close="alert"></button>
+                    <span>
+                        <h:messages layout="table" /> </span>
                 </h:panelGroup>
                 <div class="alert alert-danger display-hide">
                     <button class="close" data-close="alert"></button>
@@ -85,7 +91,7 @@
                         Login <i class="m-icon-swapright m-icon-white"></i>
                     </button>
                 </div>
-                <h:commandLink styleClass="submit-login" action="#{loginBean.submit()}"></h:commandLink>
+                <h:commandLink styleClass="submit-login" action="#{loginBean.login()}"/>
                 <div class="forget-password">
                     <h4>Esqueceu sua senha ?</h4>
                     <p>
@@ -103,7 +109,7 @@
             </h:form>
             <!-- END LOGIN FORM -->
             <!-- BEGIN FORGOT PASSWORD FORM -->
-            <form class="forget-form" action="index.html" method="post">
+            <h:form class="forget-form" id="forget-form">
                 <h3>Esqueceu sua senha ?</h3>
                 <p>
                     Entre com seu endereço de e-mail abaixo para resetar sua senha.
@@ -111,20 +117,21 @@
                 <div class="form-group">
                     <div class="input-icon">
                         <i class="fa fa-envelope"></i>
-                        <input class="form-control placeholder-no-fix" type="text" autocomplete="off" placeholder="E-mail" name="email"/>
+                        <h:inputText class="form-control placeholder-no-fix" autocomplete="off" p:placeholder="E-mail" p:name="email"/>
                     </div>
                 </div>
                 <div class="form-actions">
                     <button type="button" id="back-btn" class="btn">
                         <i class="m-icon-swapleft"></i> Voltar </button>
-                    <button type="submit" class="btn blue pull-right">
+                    <button type="submit" class="btn blue pull-right" id="submit-email">
                         Submeter <i class="m-icon-swapright m-icon-white"></i>
                     </button>
                 </div>
-            </form>
+                <h:commandLink styleClass="submit-emailrecover" action="#{loginBean.recoverPassword()}"/>
+            </h:form>
             <!-- END FORGOT PASSWORD FORM -->
             <!-- BEGIN REGISTRATION FORM -->
-            <form class="register-form" action="index.html" method="post">
+            <h:form class="register-form">
                 <h3>Registro</h3>
                 <p>
                     Entre com seus detalhes pessoais abaixo:
@@ -192,7 +199,7 @@
                 </div>
                 <div class="form-group">
                     <label>
-                        <input type="checkbox" name="tnc"/> Eu concordo com os <a href="#">
+                        <input type="checkbox" checked="true" name="tnc"/> Eu concordo com os <a href="#">
                             Termos de Serviço </a>
                         e <a href="#">
                             Política de Privacidade </a>
@@ -207,7 +214,7 @@
                         Registrar <i class="m-icon-swapright m-icon-white"></i>
                     </button>
                 </div>
-            </form>
+            </h:form>
             <!-- END REGISTRATION FORM -->
         </div>
         <!-- END LOGIN -->
