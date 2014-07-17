@@ -15,7 +15,7 @@ import java.util.List;
  *
  * @author PRCC
  */
-public class UsuarioBO implements Serializable{
+public class UsuarioBO implements Serializable {
     
     private UsuarioDAO usuarioDAO;
     
@@ -31,7 +31,7 @@ public class UsuarioBO implements Serializable{
         }
     }
 
-    public Usuario findUsuario(Integer cpf) {
+    public Usuario findUsuario(Long cpf) {
         try { 
             return usuarioDAO.findUsuario(cpf);
         } catch (Exception e) {

@@ -41,8 +41,8 @@ public class UsuarioDAO implements Serializable {
     public void create(Usuario usuario) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             RecuperarSenha recuperarSenha = usuario.getRecuperarSenha();
             if (recuperarSenha != null) {
                 recuperarSenha = em.getReference(recuperarSenha.getClass(), recuperarSenha.getUsuarioFk());
@@ -79,8 +79,8 @@ public class UsuarioDAO implements Serializable {
     public void edit(Usuario usuario) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             Usuario persistentUsuario = em.find(Usuario.class, usuario.getCpf());
             RecuperarSenha recuperarSenhaOld = persistentUsuario.getRecuperarSenha();
             RecuperarSenha recuperarSenhaNew = usuario.getRecuperarSenha();
@@ -117,7 +117,7 @@ public class UsuarioDAO implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = usuario.getCpf();
+                Long id = usuario.getCpf();
                 if (findUsuario(id) == null) {
                     throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.");
                 }
@@ -130,11 +130,11 @@ public class UsuarioDAO implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Long id) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             Usuario usuario;
             try {
                 usuario = em.getReference(Usuario.class, id);
@@ -193,7 +193,7 @@ public class UsuarioDAO implements Serializable {
         }
     }
 
-    public Usuario findUsuario(Integer id) {
+    public Usuario findUsuario(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(Usuario.class, id);
@@ -214,5 +214,4 @@ public class UsuarioDAO implements Serializable {
             em.close();
         }
     }
-    
 }

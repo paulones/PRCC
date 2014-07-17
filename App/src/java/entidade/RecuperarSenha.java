@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ipti004
+ * @author Paulo
  */
 @Entity
 @Table(name = "recuperar_senha")
@@ -37,7 +37,7 @@ public class RecuperarSenha implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "usuario_fk")
-    private Integer usuarioFk;
+    private Long usuarioFk;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 32)
@@ -50,20 +50,20 @@ public class RecuperarSenha implements Serializable {
     public RecuperarSenha() {
     }
 
-    public RecuperarSenha(Integer usuarioFk) {
+    public RecuperarSenha(Long usuarioFk) {
         this.usuarioFk = usuarioFk;
     }
 
-    public RecuperarSenha(Integer usuarioFk, String codigo) {
+    public RecuperarSenha(Long usuarioFk, String codigo) {
         this.usuarioFk = usuarioFk;
         this.codigo = codigo;
     }
 
-    public Integer getUsuarioFk() {
+    public Long getUsuarioFk() {
         return usuarioFk;
     }
 
-    public void setUsuarioFk(Integer usuarioFk) {
+    public void setUsuarioFk(Long usuarioFk) {
         this.usuarioFk = usuarioFk;
     }
 

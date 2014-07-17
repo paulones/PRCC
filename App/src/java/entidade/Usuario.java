@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author ipti004
+ * @author Paulo
  */
 @Entity
 @Table(name = "usuario")
@@ -39,7 +39,7 @@ public class Usuario implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "cpf")
-    private Integer cpf;
+    private Long cpf;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -47,13 +47,13 @@ public class Usuario implements Serializable {
     private String nome;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 50)
+    @Size(min = 1, max = 32)
     @Column(name = "senha")
     private String senha;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 100)
+    @Size(min = 1, max = 50)
     @Column(name = "email")
     private String email;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
@@ -62,22 +62,22 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Integer cpf) {
+    public Usuario(Long cpf) {
         this.cpf = cpf;
     }
 
-    public Usuario(Integer cpf, String nome, String senha, String email) {
+    public Usuario(Long cpf, String nome, String senha, String email) {
         this.cpf = cpf;
         this.nome = nome;
         this.senha = senha;
         this.email = email;
     }
 
-    public Integer getCpf() {
+    public Long getCpf() {
         return cpf;
     }
 
-    public void setCpf(Integer cpf) {
+    public void setCpf(Long cpf) {
         this.cpf = cpf;
     }
 

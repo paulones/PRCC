@@ -55,8 +55,8 @@ public class RecuperarSenhaDAO implements Serializable {
         }
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             Usuario usuario = recuperarSenha.getUsuario();
             if (usuario != null) {
                 usuario = em.getReference(usuario.getClass(), usuario.getCpf());
@@ -88,8 +88,8 @@ public class RecuperarSenhaDAO implements Serializable {
     public void edit(RecuperarSenha recuperarSenha) throws IllegalOrphanException, NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             RecuperarSenha persistentRecuperarSenha = em.find(RecuperarSenha.class, recuperarSenha.getUsuarioFk());
             Usuario usuarioOld = persistentRecuperarSenha.getUsuario();
             Usuario usuarioNew = recuperarSenha.getUsuario();
@@ -128,7 +128,7 @@ public class RecuperarSenhaDAO implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = recuperarSenha.getUsuarioFk();
+                Long id = recuperarSenha.getUsuarioFk();
                 if (findRecuperarSenha(id) == null) {
                     throw new NonexistentEntityException("The recuperarSenha with id " + id + " no longer exists.");
                 }
@@ -141,11 +141,11 @@ public class RecuperarSenhaDAO implements Serializable {
         }
     }
 
-    public void destroy(Integer id) throws NonexistentEntityException, RollbackFailureException, Exception {
+    public void destroy(Long id) throws NonexistentEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
-            em = getEntityManager();
             em.getTransaction().begin();
+            em = getEntityManager();
             RecuperarSenha recuperarSenha;
             try {
                 recuperarSenha = em.getReference(RecuperarSenha.class, id);
@@ -198,7 +198,7 @@ public class RecuperarSenhaDAO implements Serializable {
         }
     }
 
-    public RecuperarSenha findRecuperarSenha(Integer id) {
+    public RecuperarSenha findRecuperarSenha(Long id) {
         EntityManager em = getEntityManager();
         try {
             return em.find(RecuperarSenha.class, id);
