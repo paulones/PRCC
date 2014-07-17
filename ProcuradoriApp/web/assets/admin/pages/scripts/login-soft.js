@@ -1,12 +1,11 @@
 var Login = function() {
-
     var handleLogin = function() {
         $('.login-form').validate({
             errorElement: 'span', //default input error message container
             errorClass: 'help-block', // default input error message class
             focusInvalid: false, // do not focus the last invalid input
             rules: {
-                username: {
+                cpf: {
                     required: true
                 },
                 password: {
@@ -17,8 +16,8 @@ var Login = function() {
                 }
             },
             messages: {
-                username: {
-                    required: "Entre com um usuário."
+                cpf: {
+                    required: "Entre com um CPF."
                 },
                 password: {
                     required: "Digite uma senha."
