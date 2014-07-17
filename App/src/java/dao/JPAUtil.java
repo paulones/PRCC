@@ -16,7 +16,7 @@ import javax.persistence.Persistence;
  */
 public class JPAUtil implements Serializable{
     
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("ProcuradoriAppPU");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("AppPU");
     
     public static EntityManagerFactory getEMF() {
         return emf;

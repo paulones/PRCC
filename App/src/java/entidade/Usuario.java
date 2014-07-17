@@ -11,8 +11,6 @@ import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
@@ -24,25 +22,24 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author PRCC
+ * @author ipti004
  */
 @Entity
 @Table(name = "usuario")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
-    @NamedQuery(name = "Usuario.findById", query = "SELECT u FROM Usuario u WHERE u.id = :id"),
-    @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findByCpf", query = "SELECT u FROM Usuario u WHERE u.cpf = :cpf"),
+    @NamedQuery(name = "Usuario.findByNome", query = "SELECT u FROM Usuario u WHERE u.nome = :nome"),
     @NamedQuery(name = "Usuario.findBySenha", query = "SELECT u FROM Usuario u WHERE u.senha = :senha"),
     @NamedQuery(name = "Usuario.findByEmail", query = "SELECT u FROM Usuario u WHERE u.email = :email")})
 public class Usuario implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "id")
-    private Integer id;
+    @NotNull
+    @Column(name = "cpf")
+    private Integer cpf;
     @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 50)
@@ -50,16 +47,13 @@ public class Usuario implements Serializable {
     private String nome;
     @Basic(optional = false)
     @NotNull
-    @Size(min = 1, max = 20)
-    @Column(name = "cpf")
-    private String cpf;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 32)
+    @Size(min = 1, max = 50)
     @Column(name = "senha")
     private String senha;
-    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="E-mail inválido")//if the field contains email address consider using this annotation to enforce field validation
-    @Size(max = 50)
+    // @Pattern(regexp="[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\\.)+[a-z0-9](?:[a-z0-9-]*[a-z0-9])?", message="Invalid email")//if the field contains email address consider using this annotation to enforce field validation
+    @Basic(optional = false)
+    @NotNull
+    @Size(min = 1, max = 100)
     @Column(name = "email")
     private String email;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "usuario")
@@ -68,23 +62,23 @@ public class Usuario implements Serializable {
     public Usuario() {
     }
 
-    public Usuario(Integer id) {
-        this.id = id;
-    }
-
-    public Usuario(Integer id, String nome, String cpf, String senha) {
-        this.id = id;
-        this.nome = nome;
+    public Usuario(Integer cpf) {
         this.cpf = cpf;
+    }
+
+    public Usuario(Integer cpf, String nome, String senha, String email) {
+        this.cpf = cpf;
+        this.nome = nome;
         this.senha = senha;
+        this.email = email;
     }
 
-    public Integer getId() {
-        return id;
+    public Integer getCpf() {
+        return cpf;
     }
 
-    public void setId(Integer id) {
-        this.id = id;
+    public void setCpf(Integer cpf) {
+        this.cpf = cpf;
     }
 
     public String getNome() {
@@ -93,14 +87,6 @@ public class Usuario implements Serializable {
 
     public void setNome(String nome) {
         this.nome = nome;
-    }
-
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     public String getSenha() {
@@ -130,7 +116,7 @@ public class Usuario implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        hash += (cpf != null ? cpf.hashCode() : 0);
         return hash;
     }
 
@@ -141,7 +127,7 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if ((this.cpf == null && other.cpf != null) || (this.cpf != null && !this.cpf.equals(other.cpf))) {
             return false;
         }
         return true;
@@ -149,7 +135,7 @@ public class Usuario implements Serializable {
 
     @Override
     public String toString() {
-        return "Entity.Usuario[ id=" + id + " ]";
+        return "entidade.Usuario[ cpf=" + cpf + " ]";
     }
     
 }

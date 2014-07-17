@@ -59,7 +59,7 @@ public class RecuperarSenhaDAO implements Serializable {
             em.getTransaction().begin();
             Usuario usuario = recuperarSenha.getUsuario();
             if (usuario != null) {
-                usuario = em.getReference(usuario.getClass(), usuario.getId());
+                usuario = em.getReference(usuario.getClass(), usuario.getCpf());
                 recuperarSenha.setUsuario(usuario);
             }
             em.persist(recuperarSenha);
@@ -107,7 +107,7 @@ public class RecuperarSenhaDAO implements Serializable {
                 throw new IllegalOrphanException(illegalOrphanMessages);
             }
             if (usuarioNew != null) {
-                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getId());
+                usuarioNew = em.getReference(usuarioNew.getClass(), usuarioNew.getCpf());
                 recuperarSenha.setUsuario(usuarioNew);
             }
             recuperarSenha = em.merge(recuperarSenha);
