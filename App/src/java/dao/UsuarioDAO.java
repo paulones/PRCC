@@ -8,6 +8,7 @@ package dao;
 
 import dao.exceptions.IllegalOrphanException;
 import dao.exceptions.NonexistentEntityException;
+import dao.exceptions.PreexistingEntityException;
 import dao.exceptions.RollbackFailureException;
 import java.io.Serializable;
 import javax.persistence.Query;
@@ -37,7 +38,7 @@ public class UsuarioDAO implements Serializable {
         return emf.createEntityManager();
     }
 
-    public void create(Usuario usuario) throws RollbackFailureException, Exception {
+    public void create(Usuario usuario) throws PreexistingEntityException, RollbackFailureException, Exception {
         EntityManager em = null;
         try {
             em = getEntityManager();
@@ -64,6 +65,9 @@ public class UsuarioDAO implements Serializable {
             } catch (Exception re) {
                 throw new RollbackFailureException("An error occurred attempting to roll back the transaction.", re);
             }
+            if (findUsuario(usuario.getCpf()) != null) {
+                throw new PreexistingEntityException("Usuario " + usuario + " already exists.", ex);
+            }
             throw ex;
         } finally {
             if (em != null) {
@@ -77,7 +81,7 @@ public class UsuarioDAO implements Serializable {
         try {
             em = getEntityManager();
             em.getTransaction().begin();
-            Usuario persistentUsuario = em.find(Usuario.class, usuario.getId());
+            Usuario persistentUsuario = em.find(Usuario.class, usuario.getCpf());
             RecuperarSenha recuperarSenhaOld = persistentUsuario.getRecuperarSenha();
             RecuperarSenha recuperarSenhaNew = usuario.getRecuperarSenha();
             List<String> illegalOrphanMessages = null;
@@ -113,7 +117,7 @@ public class UsuarioDAO implements Serializable {
             }
             String msg = ex.getLocalizedMessage();
             if (msg == null || msg.length() == 0) {
-                Integer id = usuario.getId();
+                Integer id = usuario.getCpf();
                 if (findUsuario(id) == null) {
                     throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.");
                 }
@@ -134,7 +138,7 @@ public class UsuarioDAO implements Serializable {
             Usuario usuario;
             try {
                 usuario = em.getReference(Usuario.class, id);
-                usuario.getId();
+                usuario.getCpf();
             } catch (EntityNotFoundException enfe) {
                 throw new NonexistentEntityException("The usuario with id " + id + " no longer exists.", enfe);
             }

@@ -22,7 +22,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
- * @author PRCC
+ * @author ipti004
  */
 @Entity
 @Table(name = "recuperar_senha")
@@ -43,7 +43,7 @@ public class RecuperarSenha implements Serializable {
     @Size(min = 1, max = 32)
     @Column(name = "codigo")
     private String codigo;
-    @JoinColumn(name = "usuario_fk", referencedColumnName = "id", insertable = false, updatable = false)
+    @JoinColumn(name = "usuario_fk", referencedColumnName = "cpf", insertable = false, updatable = false)
     @OneToOne(optional = false)
     private Usuario usuario;
 
@@ -105,7 +105,7 @@ public class RecuperarSenha implements Serializable {
 
     @Override
     public String toString() {
-        return "Entity.RecuperarSenha[ usuarioFk=" + usuarioFk + " ]";
+        return "entidade.RecuperarSenha[ usuarioFk=" + usuarioFk + " ]";
     }
     
 }

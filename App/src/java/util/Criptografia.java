@@ -23,8 +23,8 @@ import org.apache.commons.codec.binary.Base64;
 
 public class Criptografia {
 
-    Cipher ecipher;
-    Cipher dcipher;
+    static Cipher ecipher;
+    static Cipher dcipher;
 
     // 8-byte Salt
     byte[] salt = {
@@ -58,7 +58,7 @@ public class Criptografia {
         }
     }
 
-    public String encrypt(String str) {
+    public static String encrypt(String str) {
         try {
             // Encode the string into bytes using utf-8
             byte[] utf8 = str.getBytes("UTF8");
@@ -74,12 +74,11 @@ public class Criptografia {
         } catch (javax.crypto.BadPaddingException e) {
         } catch (IllegalBlockSizeException e) {
         } catch (UnsupportedEncodingException e) {
-        } catch (java.io.IOException e) {
         }
         return null;
     }
 
-    public String decrypt(String str) {
+    public static String decrypt(String str) {
         try {
 
             // Decrypt
@@ -93,8 +92,6 @@ public class Criptografia {
             System.out.println("DesEncrypter: decrypt 2: "+e);
         } catch (UnsupportedEncodingException e) {
             System.out.println("DesEncrypter: decrypt 3: "+e);
-        } catch (java.io.IOException e) {
-            System.out.println("DesEncrypter: decrypt 4: "+e);
         }
         return null;
     }
