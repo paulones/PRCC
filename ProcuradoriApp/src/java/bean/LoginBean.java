@@ -19,43 +19,39 @@ import javax.faces.context.FacesContext;
 @SessionScoped
 public class LoginBean implements Serializable {
 
-    private boolean success;
-    private boolean fail;
+    private String message;
     
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
-            fail = false;
-            success = false;
+            message = "";
         } 
     }
 
     public void login() {
-        fail = true;
-        success = false; 
+        message = "loginFail";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não existe.", null));
     }
     
     public void recoverPassword(){
-        success = true;
-        fail = false;
+        message = "loginSuccess";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Solicitação enviada. Verifique seu e-mail.", null));
         //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao tentar enviar e-mail. Tente novamente.", null));
     }
+    
+    public void register(){
+        //message = "loginSuccess";
+        message = "registerFail";
+        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocorreu um erro interno. Tente novamente.", null));
+        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso!", null));
+    } 
 
-    public boolean isSuccess() {
-        return success;
+    public String getMessage() {
+        return message;
     }
 
-    public void setSuccess(boolean success) {
-        this.success = success;
+    public void setMessage(String message) {
+        this.message = message;
     }
 
-    public boolean isFail() {
-        return fail;
-    }
-
-    public void setFail(boolean fail) {
-        this.fail = fail;
-    }
-
+    
 }

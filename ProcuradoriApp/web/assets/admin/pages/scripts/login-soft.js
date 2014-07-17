@@ -1,5 +1,5 @@
 var Login = function() {
-    
+
     var handleLogin = function() {
         $('.login-form').validate({
             errorElement: 'span', //default input error message container
@@ -112,7 +112,7 @@ var Login = function() {
             jQuery('.forget-form').hide();
         });
     }
-    
+
     var handleRegister = function() {
 
         function format(state) {
@@ -152,16 +152,7 @@ var Login = function() {
                     required: true,
                     email: true
                 },
-                address: {
-                    required: true
-                },
-                city: {
-                    required: true
-                },
-                country: {
-                    required: true
-                },
-                username: {
+                cpf: {
                     required: true
                 },
                 password: {
@@ -170,13 +161,13 @@ var Login = function() {
                 rpassword: {
                     equalTo: "#register_password"
                 },
-                tnc: {
-                    required: true
-                }
+//                tnc: {
+//                    required: true
+//                }
             },
             messages: {// custom messages for radio buttons and checkboxes
                 tnc: {
-                    required: "Please accept TNC first."
+                    required: "Por favor, esteja de acordo com os Termos de Serviço e Política de Privacidade."
                 }
             },
             invalidHandler: function(event, validator) { //display error alert on form submit   
@@ -200,14 +191,15 @@ var Login = function() {
                 }
             },
             submitHandler: function(form) {
-                form.submit();
+                $('.submit-register').click();
             }
         });
 
         $('.register-form input').keypress(function(e) {
             if (e.which == 13) {
                 if ($('.register-form').validate().form()) {
-                    $('.register-form').submit();
+                    $('.submit-register').click();
+                    //$('.register-form').submit();
                 }
                 return false;
             }
@@ -231,9 +223,14 @@ var Login = function() {
             handleLogin();
             handleForgetPassword();
             handleRegister();
+
+            $('.cpf').inputmask("999.999.999-99", {showMaskOnHover: false, showMaskOnFocus: false});
             
-            $('.cpf').inputmask("999.999.999-99",{showMaskOnHover: false, showMaskOnFocus: false });
-            
+            if ($('.register-error').length > 0) {
+                jQuery('.login-form').hide();
+                jQuery('.register-form').show();
+            }
+
             $.backstretch([
                 "assets/admin/pages/media/bg/1.jpg",
                 "assets/admin/pages/media/bg/2.jpg",
