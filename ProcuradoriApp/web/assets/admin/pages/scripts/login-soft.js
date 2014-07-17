@@ -1,4 +1,5 @@
 var Login = function() {
+    
     var handleLogin = function() {
         $('.login-form').validate({
             errorElement: 'span', //default input error message container
@@ -226,11 +227,13 @@ var Login = function() {
     return {
         //main function to initiate the module
         init: function() {
-
+            
             handleLogin();
             handleForgetPassword();
             handleRegister();
-
+            
+            $('.cpf').inputmask("999.999.999-99",{showMaskOnHover: false, showMaskOnFocus: false });
+            
             $.backstretch([
                 "assets/admin/pages/media/bg/1.jpg",
                 "assets/admin/pages/media/bg/2.jpg",
