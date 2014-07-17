@@ -27,7 +27,7 @@ public class LoginBean implements Serializable {
         } 
     }
 
-    public void login() { 
+    public void login() {
         message = "loginFail";
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não existe.", null));
     }
