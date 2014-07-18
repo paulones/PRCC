@@ -14,10 +14,9 @@ import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-import util.Criptografia;
 import util.EnviarEmail;
 import util.GeradorMD5;
+import util.ValidaCPF;
 
 /**
  *
@@ -82,21 +81,28 @@ public class LoginBean implements Serializable {
     }
 
     public void registrar() {
-        Long cpf = Long.valueOf(this.cpf.replace(".", "").replace("-", ""));
-        usuario.setCpf(cpf);
-        usuario.setNome(nome);
-        usuario.setEmail(email);
-        usuario.setSenha(GeradorMD5.generate(senha));
-        if (usuarioBO.findUsuario(cpf) == null) {
-            usuarioBO.create(usuario);
-            mensagem = "registerSuccess";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso!", null));
-            nome = "";
-            email = "";
-            this.cpf = "";
+        cpf = this.cpf.replace(".", "").replace("-", "");
+        if (ValidaCPF.isCPF(cpf)) {
+            Long cpf = Long.valueOf(this.cpf);
+            usuario.setCpf(cpf);
+            usuario.setNome(nome);
+            usuario.setEmail(email);
+            usuario.setSenha(GeradorMD5.generate(senha));
+            if (usuarioBO.findUsuario(cpf) == null) {
+                usuarioBO.create(usuario);
+                mensagem = "registerSuccess";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso!", null));
+                nome = "";
+                email = "";
+                this.cpf = "";
+            } else {
+                mensagem = "registerFail";
+                FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Já existe um usuário com o CPF " + this.cpf + " cadastrado.", null));
+                this.cpf = "";
+            }
         } else {
             mensagem = "registerFail";
-            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Já existe um usuário com o CPF " + this.cpf + " cadastrado.", null));
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Por favor, digite um CPF válido.", null));
             this.cpf = "";
         }
     }
