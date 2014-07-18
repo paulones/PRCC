@@ -148,14 +148,14 @@ var Login = function() {
                 fullname: {
                     required: true
                 },
-                email: {
+                register_email: {
                     required: true,
                     email: true
                 },
-                cpf: {
+                register_cpf: {
                     required: true
                 },
-                password: {
+                register_password: {
                     required: true
                 },
                 rpassword: {

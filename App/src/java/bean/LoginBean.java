@@ -27,6 +27,7 @@ import util.GeradorMD5;
 @SessionScoped
 public class LoginBean implements Serializable {
 
+    private String nome;
     private String cpf;
     private String senha;
     private String email;
@@ -39,12 +40,14 @@ public class LoginBean implements Serializable {
             usuarioBO = new UsuarioBO();
             usuario = new Usuario();
             mensagem = "";
+            nome = "";
+            email = "";
             cpf = "";
         }
     }
 
     public void login() throws IOException {
-        Usuario usuario = usuarioBO.findUsuario(Long.valueOf(cpf.replace(".", "").replace("-", "")));
+        usuario = usuarioBO.findUsuario(Long.valueOf(cpf.replace(".", "").replace("-", "")));
         senha = GeradorMD5.generate(senha);
         if (usuario != null) {
             if (senha.equals(usuario.getSenha())) {
@@ -75,17 +78,27 @@ public class LoginBean implements Serializable {
             e.printStackTrace();
             mensagem = "forgetFail";
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Ocorreu um erro ao tentar enviar e-mail de recuperação de senha. Tente novamente.", null));
-
         }
-
-        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro ao tentar enviar e-mail. Tente novamente.", null));
     }
 
     public void registrar() {
-        //message = "loginSuccess";
-        mensagem = "registerFail";
-        FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Ocorreu um erro interno. Tente novamente.", null));
-        //FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso!", null));
+        Long cpf = Long.valueOf(this.cpf.replace(".", "").replace("-", ""));
+        usuario.setCpf(cpf);
+        usuario.setNome(nome);
+        usuario.setEmail(email);
+        usuario.setSenha(GeradorMD5.generate(senha));
+        if (usuarioBO.findUsuario(cpf) == null) {
+            usuarioBO.create(usuario);
+            mensagem = "registerSuccess";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, "Usuário registrado com sucesso!", null));
+            nome = "";
+            email = "";
+            this.cpf = "";
+        } else {
+            mensagem = "registerFail";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Já existe um usuário com o CPF " + this.cpf + " cadastrado.", null));
+            this.cpf = "";
+        }
     }
 
     public String getMensagem() {
@@ -126,6 +139,14 @@ public class LoginBean implements Serializable {
 
     public void setEmail(String email) {
         this.email = email;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
 }
