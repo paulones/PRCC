@@ -5,6 +5,7 @@
  */
 package bean;
 
+import bo.LoginBO;
 import bo.UsuarioBO;
 import entidade.RecuperarSenha;
 import entidade.Usuario;
@@ -33,19 +34,24 @@ public class LoginBean implements Serializable {
     private String mensagem;
     private Usuario usuario;
     private UsuarioBO usuarioBO;
+    private LoginBO loginBO;
+    private String licenca;
 
     public void init() {
         if (!FacesContext.getCurrentInstance().isPostback()) {
             usuarioBO = new UsuarioBO();
+            loginBO = new LoginBO();
             usuario = new Usuario();
             mensagem = "";
             nome = "";
             email = "";
             cpf = "";
+            licenca = "";
         }
     }
 
     public void login() throws IOException {
+        if (!loginBO.expirado()){
         usuario = usuarioBO.findUsuario(Long.valueOf(cpf.replace(".", "").replace("-", "")));
         senha = GeradorMD5.generate(senha);
         if (usuario != null) {
@@ -58,6 +64,10 @@ public class LoginBean implements Serializable {
         } else {
             mensagem = "loginFail";
             FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Usuário não existe.", null));
+        }
+        } else {
+            mensagem = "loginFail";
+            FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_ERROR, "Tempo da conta expirou, adquira outra licença!", null));
         }
     }
 
